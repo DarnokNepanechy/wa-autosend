@@ -17,51 +17,45 @@ public class Application {
         driver.get("https://web.whatsapp.com/");
 
         // Ожидание аутентификации с помощью QR кода
-        try {
-            Thread.sleep(50_000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        waitingFor(49485, 53321);
 
         for (String client: clients) {
-            // Строим URI из текста для сообщения и номера клиента и переходим по нему
-            driver.get(whatsAppClient.buildURI("", client));
-            try {
-                Thread.sleep(randomInt(25485, 30321));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            // log to console
+            System.out.println("Отправка сообщения на номер: " + client);
+            System.out.println("С сообщением: \n" + textMessage);
 
-            // Ищем элемент со вставленным сообщением и кликаем на него
-            driver.findElement(By.xpath("//*[@id=\"main\"]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[2]")).click();
             try {
-                Thread.sleep(randomInt(1230, 2345));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+                // Строим URI из текста для сообщения и номера клиента и переходим по нему
+                driver.get(whatsAppClient.buildURI("", client));
+                waitingFor(25485, 30321);
 
-            // Вставляем текст
-            driver.findElement(By.className("p3_M1")).sendKeys(textMessage);
-            try {
-                Thread.sleep(randomInt(2320, 3411));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+                // Ищем элемент со вставленным сообщением и кликаем на него
+                driver.findElement(By.xpath("//*[@id=\"main\"]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[2]")).click();
+                waitingFor(3230, 5345);
 
-            // Ищем кнопку для отправки сообщения и кликаем на неё
-            driver.findElement(By.xpath("//*[@id=\"main\"]/footer/div[1]/div/span[2]/div/div[2]/div[2]/button/span")).click();
-            try {
-                Thread.sleep(randomInt(12235, 15151));
-            } catch (InterruptedException e) {
+                // Вставляем текст
+                driver.findElement(By.xpath("//*[@id=\"main\"]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[2]")).sendKeys(textMessage);
+                waitingFor(3320, 5411);
+
+                // Ищем кнопку для отправки сообщения и кликаем на неё
+                driver.findElement(By.xpath("//*[@id=\"main\"]/footer/div[1]/div/span[2]/div/div[2]/div[2]/button/span")).click();
+                waitingFor(12235, 15151);
+            } catch (UnsupportedOperationException e) {;
                 e.printStackTrace();
             }
         }
 
         driver.quit();
+
     }
 
-    public static int randomInt(int min, int max) {
+    public static void waitingFor(int min, int max) {
         max -= min;
-        return (int) (Math.random() * ++max) + min;
+
+        try {
+            Thread.sleep((int) (Math.random() * ++max) + min);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

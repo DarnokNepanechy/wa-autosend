@@ -27,12 +27,16 @@ public class WhatsAppClient {
             e.printStackTrace();
         }
 
-        return fileContent.toString()
-                .replace(" ", "%20")
-                .replace("️", "%20%20")
-                .replace("⠀", "%20")
-                .replace("!", "%21")
-                .replace("\"", "%22");
+        if (isForURI) {
+            return fileContent.toString()
+                    .replace(" ", "%20")
+                    .replace("️", "%20%20")
+                    .replace("⠀", "%20")
+                    .replace("!", "%21")
+                    .replace("\"", "%22");
+        } else {
+            return fileContent.toString();
+        }
     }
 
     public List<String> readFileForContacts(String path) {
