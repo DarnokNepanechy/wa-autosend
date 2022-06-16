@@ -21,26 +21,24 @@ public class Application {
         waitingFor(49485, 53321);
 
         for (String client: clients) {
-            // log to console
-            System.out.println("Отправка сообщения на номер: " + client);
-            System.out.println("С сообщением: \n" + textMessage);
-
             try {
                 // Строим URI из текста для сообщения и номера клиента и переходим по нему
                 driver.get(whatsAppClient.buildURI("", client));
-                waitingFor(25485, 30321);
+                waitingFor(15515, 19578);
 
-                // Ищем элемент со вставленным сообщением и кликаем на него
-                driver.findElement(By.xpath("//*[@id=\"main\"]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[2]")).click();
-                waitingFor(3230, 5345);
+                if (driver.findElements(By.xpath("//*[@id=\"main\"]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[2]")).size() > 0) {
+                    // Ищем элемент со вставленным сообщением и кликаем на него
+                    driver.findElement(By.xpath("//*[@id=\"main\"]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[2]")).click();
+                    waitingFor(1567, 3124);
 
-                // Вставляем текст
-                driver.findElement(By.xpath("//*[@id=\"main\"]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[2]")).sendKeys( Keys.CONTROL, "v");
-                waitingFor(3320, 5411);
+                    // Вставляем текст из буфера обмена
+                    driver.findElement(By.xpath("//*[@id=\"main\"]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[2]")).sendKeys( Keys.CONTROL, "v");
+                    waitingFor(1564, 2435);
 
-                // Ищем кнопку для отправки сообщения и кликаем на неё
-                driver.findElement(By.xpath("//*[@id=\"main\"]/footer/div[1]/div/span[2]/div/div[2]/div[2]/button/span")).click();
-                waitingFor(12235, 15151);
+                    // Ищем кнопку для отправки сообщения и кликаем на неё
+                    driver.findElement(By.xpath("//*[@id=\"main\"]/footer/div[1]/div/span[2]/div/div[2]/div[2]/button/span")).click();
+                    waitingFor(6554, 7865);
+                }
             } catch (UnsupportedOperationException e) {;
                 e.printStackTrace();
             }
