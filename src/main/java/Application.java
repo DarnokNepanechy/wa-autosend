@@ -1,4 +1,5 @@
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public class Application {
                 waitingFor(3230, 5345);
 
                 // Вставляем текст
-                driver.findElement(By.xpath("//*[@id=\"main\"]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[2]")).sendKeys(textMessage);
+                driver.findElement(By.xpath("//*[@id=\"main\"]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[2]")).sendKeys( Keys.CONTROL, "v");
                 waitingFor(3320, 5411);
 
                 // Ищем кнопку для отправки сообщения и кликаем на неё

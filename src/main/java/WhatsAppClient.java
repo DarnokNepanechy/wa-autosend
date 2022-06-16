@@ -45,7 +45,14 @@ public class WhatsAppClient {
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(path), StandardCharsets.UTF_8))) {
             String sub;
             while ((sub = bufferedReader.readLine()) != null) {
-                numbers.add(sub);
+                sub = sub.replaceAll("[^0-9]", "");
+                if (sub.length() == 11) {
+                    if (sub.startsWith("8")) {
+                        sub = "7" + sub.substring(1);
+                    }
+                    numbers.add(sub);
+                }
+
             }
         } catch (IOException e) {
             e.printStackTrace();
