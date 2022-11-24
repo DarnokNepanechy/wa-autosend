@@ -3,14 +3,15 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class Application {
     public static void main(String[] args) {
         WhatsAppClient whatsAppClient = new WhatsAppClient();
+        Scanner scanner = new Scanner(System.in);
 
         // Получение данных из файлов text и contacts
         List<String> clients = whatsAppClient.readFileForContacts("src/main/resources/contacts");
-        String textMessage = whatsAppClient.readFileForMessage("src/main/resources/text", false);
 
         // Создание драйвера для chrome и переход в приложение whatsapp web
         System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
@@ -18,26 +19,33 @@ public class Application {
         driver.get("https://web.whatsapp.com/");
 
         // Ожидание аутентификации с помощью QR кода
-        waitingFor(49485, 53321);
+        System.out.println("\nПосле аутентификации и загрузки страницы whatsapp web нажми клавишу \"Enter\", чтобы приложение начало работать.");
+        scanner.nextLine();
+
+        int time = 0;
 
         for (String client: clients) {
             try {
                 // Строим URI из текста для сообщения и номера клиента и переходим по нему
                 driver.get(whatsAppClient.buildURI("", client));
-                waitingFor(15515, 19578);
+                waitingFor(15515 + time, 19578 + time);
 
-                if (driver.findElements(By.xpath("//*[@id=\"main\"]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[2]")).size() > 0) {
+                if (driver.findElements(By.xpath("//*[@id=\"main\"]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[1]/p")).size() > 0) {
                     // Ищем элемент со вставленным сообщением и кликаем на него
-                    driver.findElement(By.xpath("//*[@id=\"main\"]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[2]")).click();
+                    driver.findElement(By.xpath("//*[@id=\"main\"]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[1]/p")).click();
                     waitingFor(1567, 3124);
 
                     // Вставляем текст из буфера обмена
-                    driver.findElement(By.xpath("//*[@id=\"main\"]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[2]")).sendKeys( Keys.CONTROL, "v");
+                    driver.findElement(By.xpath("//*[@id=\"main\"]/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[1]/p")).sendKeys( Keys.CONTROL, "v");
+
                     waitingFor(1564, 2435);
 
                     // Ищем кнопку для отправки сообщения и кликаем на неё
                     driver.findElement(By.xpath("//*[@id=\"main\"]/footer/div[1]/div/span[2]/div/div[2]/div[2]/button/span")).click();
-                    waitingFor(6554, 7865);
+                    System.out.println("Сообщение успешно отослано контакту " + client + ".");
+                    waitingFor(6554 + time, 7865 + time);
+                } else {
+                    System.out.println("Контакт " + client + " не найден в whatsapp.");
                 }
             } catch (UnsupportedOperationException e) {;
                 e.printStackTrace();
@@ -45,7 +53,6 @@ public class Application {
         }
 
         driver.quit();
-
     }
 
     public static void waitingFor(int min, int max) {

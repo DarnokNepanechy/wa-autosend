@@ -45,12 +45,19 @@ public class WhatsAppClient {
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(path), StandardCharsets.UTF_8))) {
             String sub;
             while ((sub = bufferedReader.readLine()) != null) {
+                // удаляет все символы, кроме цифр
                 sub = sub.replaceAll("[^0-9]", "");
+                // затем, если цифр не 11, то пропускает
                 if (sub.length() == 11) {
+                    // если начинается на 8, то заменяет цифрой 7
                     if (sub.startsWith("8")) {
                         sub = "7" + sub.substring(1);
                     }
                     numbers.add(sub);
+                }
+                // елси длина номера 10 символов и начинается на 9, то добавляем в начало 7
+                if (sub.length() == 10 && sub.startsWith("9")) {
+                    numbers.add("7" + sub);
                 }
 
             }
